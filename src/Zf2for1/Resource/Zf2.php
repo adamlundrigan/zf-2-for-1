@@ -29,6 +29,12 @@ class Zf2for1_Resource_Zf2
         $view = $bootstrap->getResource('view');
         $view->zf2 = $serviceManager->get('ViewHelperManager');
 
+        // Register the controller action helper
+        Zend_Controller_Action_HelperBroker::addPath(
+            __DIR__ . '/../Controller/Action/Helper',
+            'Zf2for1_Controller_Action_Helper'
+        );
+
         return $app;
     }
 }
