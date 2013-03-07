@@ -1,8 +1,9 @@
 <?php
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Zf2for1_Controller_Action_Helper_Zf2 extends Zend_Controller_Action_Helper_Abstract
 {
-    protected $serviceManager;
+    protected $serviceLocator;
 
     /**
      * Direct calls to this action helper should proxy to the ZF2 ControllerPluginManager
@@ -11,7 +12,7 @@ class Zf2for1_Controller_Action_Helper_Zf2 extends Zend_Controller_Action_Helper
      */
     public function direct()
     {
-        return $this->getServiceManager()->get('ControllerPluginManager');
+        return $this->getServiceLocator()->get('ControllerPluginManager');
     } 
 
     /**
@@ -33,11 +34,16 @@ class Zf2for1_Controller_Action_Helper_Zf2 extends Zend_Controller_Action_Helper
         return $plugin;
     }
 
-    public function getServiceManager()
+    public function setServiceLocator(ServiceLocatorInterface $sm)
     {
-        if (is_null($this->serviceManager)) {
-            $this->serviceManager = $this->getActionController()->getInvokeArg('bootstrap')->getResource('zf2')->getServiceManager();
+        $this->serviceLocator = $sm;
+    }
+
+    public function getServiceLocator()
+    {
+        if (is_null($this->serviceLocator)) {
+            $this->serviceLocator = $this->getActionController()->getInvokeArg('bootstrap')->getResource('zf2')->getServiceManager();
         }
-        return $this->serviceManager;
+        return $this->serviceLocator;
     }
 }
