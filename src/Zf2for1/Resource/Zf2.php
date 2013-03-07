@@ -28,5 +28,7 @@ class Zf2for1_Resource_Zf2
         $bootstrap->bootstrap('view');
         $view = $bootstrap->getResource('view');
         $view->zf2 = $serviceManager->get('ViewHelperManager');
+
+        return $app;
     }
 }
