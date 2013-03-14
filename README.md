@@ -13,6 +13,10 @@ Enjoy responsibly.
 * Registers the ZF2 autoloader
 * Bootstraps ZF2 configuration and modules
 * Makes available the ZF2 view helpers in the ZF1 view layer (`$this->zf2->get('formRow')`)
+* Makes available the ZF2 Service Manager in the ZF1 controller (`$this->_helper->zf2sm->get('service')`)
+* Provides dispatchers which will dispatch requests to ZF2 where appropriate:
+  * `Zf2for1_Controller_Dispatcher_Zf1First` dispatches a ZF1 controller if one matches the request, otherwise will dispatch ZF2 if the route exists there;
+  * `Zf2for1_Controller_Dispatcher_Zf2First` is the reverse of the `Zf1First` dispatcher
 
 ## Installation
 
@@ -23,11 +27,12 @@ This process should be simplified, but for now here's how you can get it working
 * Copy the `zf2/` directory into your application's APPLICATION\_PATH (usually `./application/`).
 * Download ZF2 and put the `Zend/` directory in `APPLICATION_PATH/zf2/vendor`
 
-Add this to your `application.config.php`:
+Add this to your `application.ini`:
 
 ```ini
 autoloaderNamespaces[]       = "Zf2for1_"
 pluginPaths.Zf2for1_Resource = "Zf2for1/Resource"
+resources.frontController.dispatcher.class = "Zf2for1_Controller_Dispatcher_Zf1First"
 resources.zf2.zf2Path        = APPLICATION_PATH "/zf2/vendor"
 resources.zf2.configPath     = APPLICATION_PATH "/zf2/config"
 resources.view[] =
@@ -41,8 +46,6 @@ There are a lot of ways this could be improved.
 
 * Better README / installation instructions and improved installation process (plus compatibility with composer)
 * The view helper implementation should be set up to handle `__invoke()` properly
-* We could attach to the route event and actually dispatch ZF2 if the request isn't for ZF1
-* We could create a ZF1 controller plugin for the service manager, possibly.
 * Whatever else you might think of.
 
 I accept pull requests. :)

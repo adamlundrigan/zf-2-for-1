@@ -13,6 +13,7 @@ class Zf2for1_Resource_Zf2
     public function init()
     {
         $options = $this->getOptions();
+        $bootstrap = $this->getBootstrap();
 
         include $options['zf2Path'] . '/Zend/Loader/AutoloaderFactory.php';
         \Zend\Loader\AutoloaderFactory::factory(array(
@@ -24,7 +25,12 @@ class Zf2for1_Resource_Zf2
         $app = \Zend\Mvc\Application::init(require $options['configPath'] . '/application.config.php');
         $serviceManager = $app->getServiceManager();
 
-        $bootstrap = $this->getBootstrap();
+        $bootstrap->bootstrap('frontcontroller');
+        $dispatcher = $bootstrap->getResource('frontcontroller')->getDispatcher();
+        if ( is_callable(array($dispatcher, 'setZf2Application')) ) {
+            $dispatcher->setZf2Application($app);
+        }
+
         $bootstrap->bootstrap('view');
         $view = $bootstrap->getResource('view');
         $view->zf2 = $serviceManager->get('ViewHelperManager');
